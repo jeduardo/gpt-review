@@ -3,8 +3,7 @@
 import logging
 import os
 
-import openai
-from openai import RateLimitError
+from openai import RateLimitError, AzureOpenAI, OpenAI
 
 import gpt_review.constants as C
 from gpt_review.context import _load_azure_openai_context
@@ -89,8 +88,9 @@ def _call_gpt(
 
         if os.environ.get("OPENAI_API_TYPE", "") == C.AZURE_API_TYPE:
             logging.debug("Using Azure Open AI.")
-            completion = openai.ChatCompletion.create(
-                deployment_id=model,
+            client = AzureOpenAI()
+            completion = client.chat.completions.create(
+                model=model,
                 messages=messages,
                 max_tokens=max_tokens,
                 temperature=temperature,
@@ -100,7 +100,8 @@ def _call_gpt(
             )
         else:
             logging.debug("Using Open AI.")
-            completion = openai.ChatCompletion.create(
+            client = OpenAI()
+            completion = client.chat.completions.create(
                 model=model,
                 messages=messages,
                 max_tokens=max_tokens,
