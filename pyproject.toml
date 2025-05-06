@@ -3,10 +3,8 @@ requires = ["flit"]
 build-backend = "flit.buildapi"
 
 [project]
-name =  "gpt-review"
-authors = [
-    {name = "Daniel Ciborowski", email = "dciborow@microsoft.com"},
-]
+name = "gpt-review"
+authors = [{ name = "Daniel Ciborowski", email = "dciborow@microsoft.com" }]
 description = "Python Project for reviewing GitHub PRs with Open AI and Chat-GPT."
 readme = "README.md"
 classifiers = [
@@ -17,24 +15,28 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11"
+    "Programming Language :: Python :: 3.11",
 ]
 requires-python = ">=3.8.1"
 dynamic = ["version"]
 dependencies = [
-  'azure-devops',
-  'azure-functions; python_version <= "3.10"',
-  'azure-identity',
-  'azure-keyvault-secrets',
-  'llama-index>=0.6.0,<0.9.0',
-  'httpx',
-  'GitPython',
-  'knack',
-  'openai',
-  'requests',
-  'pyyaml',
-  'typing_extensions; python_version <= "3.10"',
-  'transformers; python_version <= "3.8"'
+    'azure-devops',
+    'azure-functions; python_version <= "3.10"',
+    'azure-identity',
+    'azure-keyvault-secrets',
+    'llama-index>=0.12',
+    'llama-index-readers-github>=0.1.0',
+    'llama-index-embeddings-langchain>=0.1.0',
+    'llama-index-llms-openai>=0.1.0',
+    'httpx',
+    'GitPython',
+    'knack',
+    'openai',
+    'langchain-openai',
+    'requests',
+    'pyyaml',
+    'typing_extensions; python_version <= "3.10"',
+    'transformers; python_version <= "3.8"',
 ]
 
 [project.optional-dependencies]
@@ -59,7 +61,7 @@ test = [
     "pytest>=7.2.2",
     "pytest-github-actions-annotate-failures",
     "shellcheck-py==0.9.0.5",
-    "requests_mock"
+    "requests_mock",
 ]
 
 [project.scripts]
@@ -74,7 +76,7 @@ Tracker = "https://github.com/dciborow/action-gpt/issues"
 name = "gpt_review"
 
 [tool.bandit]
-exclude_dirs = ["build","dist","tests","scripts"]
+exclude_dirs = ["build", "dist", "tests", "scripts"]
 number = 4
 recursive = true
 targets = "src"
@@ -90,7 +92,7 @@ omit = [
     # Omitting files that can not be covered by tests
     "src/gpt/__main__.py",
     "src/gpt_review/__main__.py",
-    "src/gpt_review/main.py"
+    "src/gpt_review/main.py",
 ]
 
 [tool.coverage.report]
@@ -109,7 +111,7 @@ exclude = [
     "packages",
     "pywin32",
     "tests",
-    "swagger_client"
+    "swagger_client",
 ]
 ignore = [
     "E722",
@@ -129,10 +131,7 @@ src_paths = ["src", "tests", "azure"]
 
 [tool.pyright]
 include = ["src"]
-exclude = [
-    "**/node_modules",
-    "**/__pycache__",
-]
+exclude = ["**/node_modules", "**/__pycache__"]
 venv = "env37"
 
 reportMissingImports = true
@@ -141,15 +140,11 @@ reportMissingTypeStubs = false
 pythonVersion = "3.7"
 pythonPlatform = "Linux"
 
-executionEnvironments = [
-  { root = "src" }
-]
+executionEnvironments = [{ root = "src" }]
 
 [tool.pytest.ini_options]
 addopts = "--cov-report xml:coverage.xml --cov src --cov-fail-under 0 --cov-append -n auto"
-pythonpath = [
-  "src"
-]
+pythonpath = ["src"]
 testpaths = "tests"
 # junit_family = "xunit2"
 markers = [
@@ -193,7 +188,7 @@ commands =
 """
 
 [tool.pylint]
-extension-pkg-whitelist= [
+extension-pkg-whitelist = [
     "numpy",
     "torch",
     "cv2",
@@ -201,158 +196,127 @@ extension-pkg-whitelist= [
     "pydantic",
     "ciso8601",
     "netcdf4",
-    "scipy"
+    "scipy",
 ]
-ignore="CVS"
-ignore-patterns="test.*?py,conftest.py"
-init-hook='import sys; sys.setrecursionlimit(8 * sys.getrecursionlimit())'
-jobs=0
-limit-inference-results=100
-persistent="yes"
-suggestion-mode="yes"
-unsafe-load-any-extension="no"
+ignore = "CVS"
+ignore-patterns = "test.*?py,conftest.py"
+init-hook = 'import sys; sys.setrecursionlimit(8 * sys.getrecursionlimit())'
+jobs = 0
+limit-inference-results = 100
+persistent = "yes"
+suggestion-mode = "yes"
+unsafe-load-any-extension = "no"
 
 [tool.pylint.'MESSAGES CONTROL']
-enable="c-extension-no-member"
+enable = "c-extension-no-member"
 disable = [
-    "unused-import", # Covered by Ruff F401
+    "unused-import",      # Covered by Ruff F401
     "undefined-variable", # Covered by Ruff F821
-    "line-too-long", # Covered by Ruff E501
+    "line-too-long",      # Covered by Ruff E501
 ]
 [tool.pylint.'REPORTS']
-evaluation="10.0 - ((float(5 * error + warning + refactor + convention) / statement) * 10)"
-output-format="text"
-reports="no"
-score="yes"
+evaluation = "10.0 - ((float(5 * error + warning + refactor + convention) / statement) * 10)"
+output-format = "text"
+reports = "no"
+score = "yes"
 
 [tool.pylint.'REFACTORING']
-max-nested-blocks=5
-never-returning-functions="sys.exit"
+max-nested-blocks = 5
+never-returning-functions = "sys.exit"
 
 [tool.pylint.'BASIC']
-argument-naming-style="snake_case"
-attr-naming-style="snake_case"
-bad-names= [
-    "foo",
-    "bar"
-]
-class-attribute-naming-style="any"
-class-naming-style="PascalCase"
-const-naming-style="UPPER_CASE"
-docstring-min-length=-1
-function-naming-style="snake_case"
-good-names= [
-    "i",
-    "j",
-    "k",
-    "ex",
-    "Run",
-    "_"
-]
-include-naming-hint="yes"
-inlinevar-naming-style="any"
-method-naming-style="snake_case"
-module-naming-style="any"
-no-docstring-rgx="^_"
-property-classes="abc.abstractproperty"
-variable-naming-style="snake_case"
+argument-naming-style = "snake_case"
+attr-naming-style = "snake_case"
+bad-names = ["foo", "bar"]
+class-attribute-naming-style = "any"
+class-naming-style = "PascalCase"
+const-naming-style = "UPPER_CASE"
+docstring-min-length = -1
+function-naming-style = "snake_case"
+good-names = ["i", "j", "k", "ex", "Run", "_"]
+include-naming-hint = "yes"
+inlinevar-naming-style = "any"
+method-naming-style = "snake_case"
+module-naming-style = "any"
+no-docstring-rgx = "^_"
+property-classes = "abc.abstractproperty"
+variable-naming-style = "snake_case"
 
 [tool.pylint.'FORMAT']
-ignore-long-lines="^\\s*(# )?.*['\"]?<?https?://\\S+>?"
-indent-after-paren=4
-indent-string='    '
-max-line-length=120
-max-module-lines=1000
-single-line-class-stmt="no"
-single-line-if-stmt="no"
+ignore-long-lines = "^\\s*(# )?.*['\"]?<?https?://\\S+>?"
+indent-after-paren = 4
+indent-string = '    '
+max-line-length = 120
+max-module-lines = 1000
+single-line-class-stmt = "no"
+single-line-if-stmt = "no"
 
 [tool.pylint.'LOGGING']
-logging-format-style="old"
-logging-modules="logging"
+logging-format-style = "old"
+logging-modules = "logging"
 
 [tool.pylint.'MISCELLANEOUS']
-notes= [
-    "FIXME",
-    "XXX",
-    "TODO"
-]
+notes = ["FIXME", "XXX", "TODO"]
 
 [tool.pylint.'SIMILARITIES']
-ignore-comments="yes"
-ignore-docstrings="yes"
-ignore-imports="yes"
-min-similarity-lines=7
+ignore-comments = "yes"
+ignore-docstrings = "yes"
+ignore-imports = "yes"
+min-similarity-lines = 7
 
 [tool.pylint.'SPELLING']
-max-spelling-suggestions=4
-spelling-store-unknown-words="no"
+max-spelling-suggestions = 4
+spelling-store-unknown-words = "no"
 
 [tool.pylint.'STRING']
-check-str-concat-over-line-jumps="no"
+check-str-concat-over-line-jumps = "no"
 
 [tool.pylint.'TYPECHECK']
-contextmanager-decorators="contextlib.contextmanager"
-generated-members="numpy.*,np.*,pyspark.sql.functions,collect_list"
-ignore-mixin-members="yes"
-ignore-none="yes"
-ignore-on-opaque-inference="yes"
-ignored-classes="optparse.Values,thread._local,_thread._local,numpy,torch,swagger_client"
-ignored-modules="numpy,torch,swagger_client,netCDF4,scipy"
-missing-member-hint="yes"
-missing-member-hint-distance=1
-missing-member-max-choices=1
+contextmanager-decorators = "contextlib.contextmanager"
+generated-members = "numpy.*,np.*,pyspark.sql.functions,collect_list"
+ignore-mixin-members = "yes"
+ignore-none = "yes"
+ignore-on-opaque-inference = "yes"
+ignored-classes = "optparse.Values,thread._local,_thread._local,numpy,torch,swagger_client"
+ignored-modules = "numpy,torch,swagger_client,netCDF4,scipy"
+missing-member-hint = "yes"
+missing-member-hint-distance = 1
+missing-member-max-choices = 1
 
 [tool.pylint.'VARIABLES']
-additional-builtins="dbutils"
-allow-global-unused-variables="yes"
-callbacks= [
-    "cb_",
-    "_cb"
-]
-dummy-variables-rgx="_+$|(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_"
-ignored-argument-names="_.*|^ignored_|^unused_"
-init-import="no"
-redefining-builtins-modules="six.moves,past.builtins,future.builtins,builtins,io"
+additional-builtins = "dbutils"
+allow-global-unused-variables = "yes"
+callbacks = ["cb_", "_cb"]
+dummy-variables-rgx = "_+$|(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_"
+ignored-argument-names = "_.*|^ignored_|^unused_"
+init-import = "no"
+redefining-builtins-modules = "six.moves,past.builtins,future.builtins,builtins,io"
 
 [tool.pylint.'CLASSES']
-defining-attr-methods= [
-    "__init__",
-    "__new__",
-    "setUp",
-    "__post_init__"
-]
-exclude-protected= [
-    "_asdict",
-    "_fields",
-    "_replace",
-    "_source",
-    "_make"
-]
-valid-classmethod-first-arg="cls"
-valid-metaclass-classmethod-first-arg="cls"
+defining-attr-methods = ["__init__", "__new__", "setUp", "__post_init__"]
+exclude-protected = ["_asdict", "_fields", "_replace", "_source", "_make"]
+valid-classmethod-first-arg = "cls"
+valid-metaclass-classmethod-first-arg = "cls"
 
 [tool.pylint.'DESIGN']
-max-args=5
-max-attributes=7
-max-bool-expr=5
-max-branches=12
-max-locals=15
-max-parents=7
-max-public-methods=20
-max-returns=6
-max-statements=50
-min-public-methods=2
+max-args = 5
+max-attributes = 7
+max-bool-expr = 5
+max-branches = 12
+max-locals = 15
+max-parents = 7
+max-public-methods = 20
+max-returns = 6
+max-statements = 50
+min-public-methods = 2
 
 [tool.pylint.'IMPORTS']
-allow-wildcard-with-all="no"
-analyse-fallback-blocks="no"
-deprecated-modules="optparse,tkinter.tix"
+allow-wildcard-with-all = "no"
+analyse-fallback-blocks = "no"
+deprecated-modules = "optparse,tkinter.tix"
 
 [tool.pylint.'EXCEPTIONS']
-overgeneral-exceptions= [
-    "BaseException",
-    "Exception"
-]
+overgeneral-exceptions = ["BaseException", "Exception"]
 
 [tool.ruff]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
@@ -360,7 +324,52 @@ select = ["E", "F"]
 ignore = []
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
-fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "EM", "ERA", "EXE", "FBT", "ICN", "INP", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PTH", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "TRY", "UP", "YTT"]
+fixable = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "I",
+    "N",
+    "Q",
+    "S",
+    "T",
+    "W",
+    "ANN",
+    "ARG",
+    "BLE",
+    "COM",
+    "DJ",
+    "DTZ",
+    "EM",
+    "ERA",
+    "EXE",
+    "FBT",
+    "ICN",
+    "INP",
+    "ISC",
+    "NPY",
+    "PD",
+    "PGH",
+    "PIE",
+    "PL",
+    "PT",
+    "PTH",
+    "PYI",
+    "RET",
+    "RSE",
+    "RUF",
+    "SIM",
+    "SLF",
+    "TCH",
+    "TID",
+    "TRY",
+    "UP",
+    "YTT",
+]
 unfixable = []
 
 # Exclude a variety of commonly ignored directories.

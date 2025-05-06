@@ -1,25 +1,25 @@
 """Wrapper for Llama Index."""
+
 import logging
 import os
 from typing import List, Optional
 
 import openai
-from langchain.chat_models import AzureChatOpenAI, ChatOpenAI
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.llms import AzureOpenAI
-from llama_index import (
+from langchain_openai import AzureChatOpenAI, ChatOpenAI, AzureOpenAI, OpenAIEmbeddings
+from llama_index.core import (
     Document,
-    GithubRepositoryReader,
-    GPTVectorStoreIndex,
-    LangchainEmbedding,
-    LLMPredictor,
     ServiceContext,
     SimpleDirectoryReader,
     StorageContext,
     load_index_from_storage,
 )
-from llama_index.indices.base import BaseGPTIndex
-from llama_index.storage.storage_context import DEFAULT_PERSIST_DIR
+from llama_index.core.indices.vector_store.base import GPTVectorStoreIndex
+from llama_index.readers.github import GithubRepositoryReader
+from llama_index.embeddings.langchain import LangchainEmbedding
+from llama_index.core.indices.base import BaseGPTIndex
+from llama_index.core.service_context_elements.llm_predictor import LLMPredictor
+from llama_index.core.storage.storage_context import DEFAULT_PERSIST_DIR
+
 from typing_extensions import override
 
 import gpt_review.constants as C
@@ -127,9 +127,7 @@ def _load_service_context(fast: bool = False, large: bool = False) -> ServiceCon
     model_name = (
         context.turbo_llm_model_deployment_id
         if fast
-        else context.large_llm_model_deployment_id
-        if large
-        else context.smart_llm_model_deployment_id
+        else context.large_llm_model_deployment_id if large else context.smart_llm_model_deployment_id
     )
 
     if openai.api_type == C.AZURE_API_TYPE:
