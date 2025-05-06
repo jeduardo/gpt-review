@@ -36,6 +36,8 @@ You will need to provide an OpenAI API key to use this CLI tool. In order of pre
 
     ```bash
     export OPENAI_API_KEY=<your openai key>
+    export OPENAI_BASE_URL=<path to base URL if different>
+    export OPENAI_MODEL_NAME=<model name for override>
     ```
 
 4. `AZURE_KEY_VAULT_URL` to use Azure Key Vault. Put secrets for the url at `azure-open-ai` and the API Key `azure-openai-key`, then run:

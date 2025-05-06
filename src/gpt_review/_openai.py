@@ -95,19 +95,19 @@ def _call_gpt(
                 max_tokens=max_tokens,
                 temperature=temperature,
                 top_p=top_p,
-                frequency_penalty=frequency_penalty,
+                # frequency_penalty=frequency_penalty,
                 presence_penalty=presence_penalty,
             )
         else:
             logging.debug("Using Open AI.")
             client = OpenAI()
             completion = client.chat.completions.create(
-                model=model,
+                model=os.environ.get("OPENAI_MODEL_NAME", model),
                 messages=messages,
                 max_tokens=max_tokens,
                 temperature=temperature,
                 top_p=top_p,
-                frequency_penalty=frequency_penalty,
+                # frequency_penalty=frequency_penalty,
                 presence_penalty=presence_penalty,
             )
         return completion.choices[0].message.content  # type: ignore
