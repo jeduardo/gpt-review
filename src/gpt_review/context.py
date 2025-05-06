@@ -1,4 +1,5 @@
 """Context for the Azure OpenAI API and the models."""
+
 import os
 from dataclasses import dataclass
 
@@ -56,7 +57,7 @@ def _load_azure_openai_context() -> Context:
 
     if os.getenv("AZURE_OPENAI_API"):
         openai.api_type = os.environ["OPENAI_API_TYPE"] = C.AZURE_API_TYPE
-        openai.api_base = os.environ["OPENAI_API_BASE"] = os.getenv("AZURE_OPENAI_API") or azure_config.get(
+        openai.base_url = os.environ["OPENAI_API_BASE"] = os.getenv("AZURE_OPENAI_API") or azure_config.get(
             "azure_api_base"
         )
         openai.api_key = os.environ["OPENAI_API_KEY"] = os.getenv("AZURE_OPENAI_API_KEY")  # type: ignore
@@ -68,11 +69,11 @@ def _load_azure_openai_context() -> Context:
             credential=DefaultAzureCredential(additionally_allowed_tenants=["*"]),
         )
         openai.api_type = os.environ["OPENAI_API_TYPE"] = C.AZURE_API_TYPE
-        openai.api_base = os.environ["OPENAI_API_BASE"] = kv_client.get_secret("azure-open-ai").value  # type: ignore
+        openai.base_url = os.environ["OPENAI_API_BASE"] = kv_client.get_secret("azure-open-ai").value  # type: ignore
         openai.api_key = os.environ["OPENAI_API_KEY"] = kv_client.get_secret("azure-openai-key").value  # type: ignore
 
     return Context(
-        azure_api_base=openai.api_base,
+        azure_api_base=openai.base_url,
         azure_api_type=openai.api_type,
         azure_api_version=openai.api_version,
         **azure_config.get("azure_model_map", {}),

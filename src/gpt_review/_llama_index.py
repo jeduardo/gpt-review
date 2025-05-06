@@ -136,7 +136,7 @@ def _load_service_context(fast: bool = False, large: bool = False) -> ServiceCon
             deployment_name=model_name,
             model_kwargs={
                 "api_key": openai.api_key,
-                "api_base": openai.api_base,
+                "api_base": openai.base_url,
                 "api_type": openai.api_type,
                 "api_version": openai.api_version,
             },
@@ -147,7 +147,7 @@ def _load_service_context(fast: bool = False, large: bool = False) -> ServiceCon
             model_name=model_name,
             model_kwargs={
                 "api_key": openai.api_key,
-                "api_base": openai.api_base,
+                "api_base": openai.base_url,
                 "api_type": openai.api_type,
                 "api_version": openai.api_version,
             },
